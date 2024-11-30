@@ -68,9 +68,8 @@ function App() {
         }))
       }));
 
-      newContacts.map((contact: any) => {
-        const modified = contact.phoneNumbers.some((p: any) => p.original !== p.updated);
-        return { ...contact, modified };
+      newContacts.forEach((contact: any) => {
+        contact.modified = contact.phoneNumbers.some((p: any) => p.original !== p.updated);
       });
 
       setSelectedContacts(newContacts);
