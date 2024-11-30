@@ -136,6 +136,7 @@ function App() {
                 >
                   Sélectionner des contacts
                 </button>
+                {/* it's for debug */}
                 {selectedContacts.length > 0 && (
                   <div>
                     <h3 className="text-lg font-semibold">Contacts sélectionnés :</h3>
