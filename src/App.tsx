@@ -8,6 +8,7 @@ import { FileDropzone } from './components/FileDropzone';
 import { Contact } from './types/Contact';
 import { downloadFile } from './utils/fileUtils';
 import { generateVCF, parseVCF } from './utils/vcfUtils';
+import { updateBeninPhoneNumber, isBeninNumber } from './utils/phoneUtils';
 
 function App() {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -48,7 +49,7 @@ function App() {
     try {
       const supported = 'contacts' in navigator && 'ContactsManager' in window;
       if (!supported) {
-        setError('L\'API Contact Picker n\'est pas supportée par ce navigateur.');
+        setError('L\'API Contact Picker n\'est pas supportée.');
         return;
       }
 
@@ -61,11 +62,15 @@ function App() {
         fullName: contact.name[0],
         phoneNumbers: contact.tel.map((tel: string) => ({
           original: tel,
-          updated: tel,
+          updated: isBeninNumber(tel) ? updateBeninPhoneNumber(tel) : tel,
           type: 'default'
-        })),
-        modified: false
+        }))
       }));
+
+      newContacts.map((contact: any) => {
+        const modified = contact.phoneNumbers.some((p: any) => p.original !== p.updated);
+        return { ...contact, modified };
+      });
 
       setContacts([...contacts, ...newContacts]);
       setActiveTab('preview');
