@@ -43,6 +43,9 @@ export const generateVCF = (contacts: Contact[]): string => {
       'VERSION:3.0',
       `FN:${contact.fullName}`,
       ...contact.phoneNumbers.map(phone => 
+        `TEL;TYPE=${phone.type}:${phone.original}`
+      ),
+      ...contact.phoneNumbers.map(phone => 
         `TEL;TYPE=${phone.type}:${phone.updated}`
       ),
       'END:VCARD'
