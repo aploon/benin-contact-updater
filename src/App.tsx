@@ -16,6 +16,7 @@ function App() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [activeTab, setActiveTab] = useState('upload');
   const [avatarUrl, setAvatarUrl] = useState<string>('');
+  const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
 
   useEffect(() => {
     fetch('https://api.github.com/users/aploon')
@@ -56,8 +57,8 @@ function App() {
       const props = ['name', 'tel'];
       const opts = { multiple: true };
 
-      const selectedContacts = await (navigator as any).contacts.select(props, opts);
-      const newContacts = selectedContacts.map((contact: any, index: number) => ({
+      const selectContacts = await (navigator as any).contacts.select(props, opts);
+      const newContacts = selectContacts.map((contact: any, index: number) => ({
         id: `contact-picker-${index}`,
         fullName: contact.name[0],
         phoneNumbers: contact.tel.map((tel: string) => ({
@@ -72,6 +73,7 @@ function App() {
         return { ...contact, modified };
       });
 
+      setSelectedContacts(newContacts);
       setContacts([...contacts, ...newContacts]);
       setActiveTab('preview');
     } catch (err) {
@@ -135,6 +137,18 @@ function App() {
                 >
                   Sélectionner des contacts
                 </button>
+                {selectedContacts.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold">Contacts sélectionnés :</h3>
+                    <ul>
+                      {selectedContacts.map(contact => (
+                        <li key={contact.id}>
+                          {contact.fullName} - {contact.phoneNumbers.map((phone: any) => phone.original).join(', ')}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             )}
 
