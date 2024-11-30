@@ -16,7 +16,6 @@ function App() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [activeTab, setActiveTab] = useState('upload');
   const [avatarUrl, setAvatarUrl] = useState<string>('');
-  const [selectedContacts, setSelectedContacts] = useState<any[]>([]);
 
   useEffect(() => {
     fetch('https://api.github.com/users/aploon')
@@ -72,7 +71,6 @@ function App() {
         contact.modified = contact.phoneNumbers.some((p: any) => p.original !== p.updated);
       });
 
-      setSelectedContacts(newContacts);
       setContacts([...contacts, ...newContacts]);
       setActiveTab('preview');
     } catch (err) {
@@ -136,21 +134,6 @@ function App() {
                 >
                   Sélectionner des contacts
                 </button>
-                {/* it's for debug */}
-                {selectedContacts.length > 0 && (
-                  <div>
-                    <h3 className="text-lg font-semibold">Contacts sélectionnés :</h3>
-                    <ul>
-                      {selectedContacts.map(contact => (
-                        <li key={contact.id}>
-                          {contact.fullName} - {contact.phoneNumbers.map((phone: any) => phone.original).join(', ')}
-                          updated: {contact.phoneNumbers.map((phone: any) => phone.updated).join(', ')}
-                          modified: {contact.modified ? 'Oui' : 'Non'}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
               </div>
             )}
 
