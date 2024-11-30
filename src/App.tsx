@@ -102,7 +102,7 @@ function App() {
 
       <div className='fixed bottom-2 right-2 text-end hover:underline'>
         By <a href="https://github.com/aploon">Aploon</a>
-          <a href="">
+          <a href="https://github.com/aploon/benin-contact-updater">
             <img src="https://img.shields.io/badge/Github%20Repo-Contact-blue" alt="" />
           </a>
       </div>
