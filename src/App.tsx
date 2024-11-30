@@ -73,6 +73,8 @@ function App() {
 
       setContacts([...contacts, ...newContacts]);
       setActiveTab('preview');
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 5000);
     } catch (err) {
       setError('Erreur lors de la sélection des contacts.');
       console.error(err);
@@ -150,7 +152,7 @@ function App() {
       <div className='fixed bottom-2 right-2 text-end hover:underline'>
         <div className='flex gap-2 justify-end mb-1'>
           {avatarUrl && <img src={avatarUrl} alt="GitHub Avatar" className="w-6 h-6 rounded-full" />}
-          <span>By <a href="https://github.com/aploon">Aploon</a></span>
+          <span>by <a href="https://github.com/aploon">aploon</a></span>
         </div>
         <a href="https://github.com/aploon/benin-contact-updater">
           <img src="https://img.shields.io/badge/Github%20Repo-Contact-blue" alt="" />
