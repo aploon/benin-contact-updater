@@ -1,0 +1,5 @@
+services:
+  node-app:
+    image: bolt-contact-benin:1.0
+    ports:
+      - "3000:3000"
