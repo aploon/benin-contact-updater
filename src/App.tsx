@@ -44,6 +44,37 @@ function App() {
     downloadFile(vcfContent, 'contacts-updated.vcf', 'text/x-vcard');
   };
 
+  const handleContactPicker = async () => {
+    try {
+      const supported = 'contacts' in navigator && 'ContactsManager' in window;
+      if (!supported) {
+        setError('L\'API Contact Picker n\'est pas supportée par ce navigateur.');
+        return;
+      }
+
+      const props = ['name', 'tel'];
+      const opts = { multiple: true };
+
+      const selectedContacts = await (navigator as any).contacts.select(props, opts);
+      const newContacts = selectedContacts.map((contact: any, index: number) => ({
+        id: `contact-picker-${index}`,
+        fullName: contact.name[0],
+        phoneNumbers: contact.tel.map((tel: string) => ({
+          original: tel,
+          updated: tel,
+          type: 'default'
+        })),
+        modified: false
+      }));
+
+      setContacts([...contacts, ...newContacts]);
+      setActiveTab('preview');
+    } catch (err) {
+      setError('Erreur lors de la sélection des contacts.');
+      console.error(err);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Confetti active={showConfetti} />
@@ -93,6 +124,12 @@ function App() {
               <div className="space-y-4">
                 <FileDropzone onFileAccepted={handleFileAccepted} />
                 <ErrorMessage message={error} />
+                <button
+                  onClick={handleContactPicker}
+                  className="btn btn-primary w-full"
+                >
+                  Sélectionner des contacts
+                </button>
               </div>
             )}
 
@@ -109,7 +146,7 @@ function App() {
       <div className='fixed bottom-2 right-2 text-end hover:underline'>
         <div className='flex gap-2 justify-end mb-1'>
           {avatarUrl && <img src={avatarUrl} alt="GitHub Avatar" className="w-6 h-6 rounded-full" />}
-          < span>By <a href="https://github.com/aploon">Aploon</a></span>
+          <span>By <a href="https://github.com/aploon">Aploon</a></span>
         </div>
         <a href="https://github.com/aploon/benin-contact-updater">
           <img src="https://img.shields.io/badge/Github%20Repo-Contact-blue" alt="" />
