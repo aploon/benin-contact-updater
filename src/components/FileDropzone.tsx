@@ -22,7 +22,7 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({ onFileAccepted }) =>
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      {...getRootProps()}
+      {...getRootProps({ refKey: 'ref' })}
       className={classNames(
         'border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300',
         {
