@@ -60,8 +60,8 @@ function App() {
       const selectContacts = await (navigator as any).contacts.select(props, opts);
       const newContacts = selectContacts.map((contact: any, index: number) => ({
         id: `contact-picker-${index}`,
-        fullName: contact.fullName,
-        phoneNumbers: contact.phoneNumbers.map((tel: string) => ({
+        fullName: contact.name[0],
+        phoneNumbers: contact.tel.map((tel: string) => ({
           original: tel,
           updated: isBeninNumber(tel) ? updateBeninPhoneNumber(tel) : tel,
           type: 'default'
@@ -144,6 +144,8 @@ function App() {
                       {selectedContacts.map(contact => (
                         <li key={contact.id}>
                           {contact.fullName} - {contact.phoneNumbers.map((phone: any) => phone.original).join(', ')}
+                          updated: {contact.phoneNumbers.map((phone: any) => phone.updated).join(', ')}
+                          modified: {contact.modified ? 'Oui' : 'Non'}
                         </li>
                       ))}
                     </ul>
