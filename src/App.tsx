@@ -9,6 +9,8 @@ import { Contact } from './types/Contact';
 import { downloadFile } from './utils/fileUtils';
 import { generateVCF, parseVCF } from './utils/vcfUtils';
 import { updateBeninPhoneNumber, isBeninNumber } from './utils/phoneUtils';
+import Modal from './components/Modal';
+import { AnimatePresence } from 'framer-motion';
 
 function App() {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -16,6 +18,7 @@ function App() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [activeTab, setActiveTab] = useState('upload');
   const [avatarUrl, setAvatarUrl] = useState<string>('');
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetch('https://api.github.com/users/aploon')
@@ -90,8 +93,8 @@ function App() {
         <div className="max-w-md mx-auto px-4 py-6">
           <div className="flex items-center space-x-3">
             <PhoneIcon className="h-8 w-8 text-blue-600" />
-            <h1 className="text-xl font-semibold text-gray-900">
-              Mise à jour contacts Bénin
+            <h1 className="text-lg font-semibold text-gray-900">
+              Mise à jour des contacts au Bénin
             </h1>
           </div>
         </div>
@@ -130,9 +133,14 @@ function App() {
               <div className="space-y-4">
                 <FileDropzone onFileAccepted={handleFileAccepted} />
                 <ErrorMessage message={error} />
+                <div className='!mt-1 text-center'>
+                  <a href="#" onClick={() => setShowModal(true)} className='hover:text-blue-800 hover:underline'>
+                    Comment faire la mise à jour ?
+                  </a>
+                </div>
                 <button
                   onClick={handleContactPicker}
-                  className="btn btn-primary w-full"
+                  className="btn btn-primary w-full !mt-2"
                 >
                   Sélectionner des contacts
                 </button>
@@ -158,6 +166,19 @@ function App() {
           <img src="https://img.shields.io/badge/Github%20Repo-Contact-blue" alt="" />
         </a>
       </div>
+
+      <AnimatePresence>
+        {showModal && (
+          <Modal onClose={() => setShowModal(false)}>
+            <h2 className="text-xl font-semibold mb-4">Comment faire la mise à jour ?</h2>
+            <p>1. Exportez vos contacts en <a href="https://fr.wikipedia.org/wiki/VCard" className='hover:text-blue-800 underline'>VCF</a> depuis votre téléphone.</p>
+            <p>2. Importez le fichier VCF dans cette application.</p>
+            <p>3. Téléchargez le fichier VCF mis à jour.</p>
+            <p>4. Supprimez les anciens contacts de votre téléphone si nécessaire.</p>
+            <p>5. Importez le fichier VCF mis à jour dans votre téléphone.</p>
+          </Modal>
+        )}
+      </AnimatePresence>
 
     </div>
   );
