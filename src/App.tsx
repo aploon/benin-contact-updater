@@ -1,5 +1,5 @@
 import { DocumentArrowDownIcon, DocumentArrowUpIcon, PhoneIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Confetti } from './components/Confetti';
 import { ContactPreview } from './components/ContactPreview';
 import { DownloadButton } from './components/DownloadButton';
@@ -14,6 +14,14 @@ function App() {
   const [error, setError] = useState<string>('');
   const [showConfetti, setShowConfetti] = useState(false);
   const [activeTab, setActiveTab] = useState('upload');
+  const [avatarUrl, setAvatarUrl] = useState<string>('');
+
+  useEffect(() => {
+    fetch('https://api.github.com/users/aploon')
+      .then(response => response.json())
+      .then(data => setAvatarUrl(data.avatar_url))
+      .catch(error => console.error('Error fetching GitHub avatar:', error));
+  }, []);
 
   const handleFileAccepted = async (file: File) => {
     try {
@@ -39,7 +47,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Confetti active={showConfetti} />
-      
+
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-md mx-auto px-4 py-6">
@@ -59,22 +67,20 @@ function App() {
           <div className="flex border-b">
             <button
               onClick={() => setActiveTab('upload')}
-              className={`flex-1 py-4 text-sm font-medium ${
-                activeTab === 'upload'
+              className={`flex-1 py-4 text-sm font-medium ${activeTab === 'upload'
                   ? 'text-blue-600 border-b-2 border-blue-600'
                   : 'text-gray-500'
-              }`}
+                }`}
             >
               <DocumentArrowUpIcon className="h-5 w-5 mx-auto mb-1" />
               Importer
             </button>
             <button
               onClick={() => setActiveTab('preview')}
-              className={`flex-1 py-4 text-sm font-medium ${
-                activeTab === 'preview'
+              className={`flex-1 py-4 text-sm font-medium ${activeTab === 'preview'
                   ? 'text-blue-600 border-b-2 border-blue-600'
                   : 'text-gray-500'
-              }`}
+                }`}
             >
               <DocumentArrowDownIcon className="h-5 w-5 mx-auto mb-1" />
               Aperçu
@@ -101,10 +107,13 @@ function App() {
       </main>
 
       <div className='fixed bottom-2 right-2 text-end hover:underline'>
-        By <a href="https://github.com/aploon">Aploon</a>
-          <a href="https://github.com/aploon/benin-contact-updater">
-            <img src="https://img.shields.io/badge/Github%20Repo-Contact-blue" alt="" />
-          </a>
+        <div className='flex gap-2 justify-end mb-1'>
+          {avatarUrl && <img src={avatarUrl} alt="GitHub Avatar" className="w-6 h-6 rounded-full" />}
+          < span>By <a href="https://github.com/aploon">Aploon</a></span>
+        </div>
+        <a href="https://github.com/aploon/benin-contact-updater">
+          <img src="https://img.shields.io/badge/Github%20Repo-Contact-blue" alt="" />
+        </a>
       </div>
 
     </div>
